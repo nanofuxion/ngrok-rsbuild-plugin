@@ -19,7 +19,7 @@ async function copyPatches() {
     return;
   }
 
-  if (!fs.exists(projectPatchesDir)) {
+  if (!fsSync.existsSync(projectPatchesDir)) {
     await fsSync.mkdirSync(projectPatchesDir, { recursive: true });
   }
 
