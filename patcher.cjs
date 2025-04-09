@@ -1,8 +1,8 @@
 // patcher.js
 
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
-const { execSync } = require('child_process');
+const { exec } = require('child_process');
 
 // Path to the root of the main project (adjust if deeply nested)
 const projectRoot = path.resolve(__dirname, '../..');
@@ -12,29 +12,29 @@ const pluginPatchesDir = path.join(__dirname, 'patches'); // inside plugin
 const projectPatchesDir = path.join(projectRoot, 'patches');
 
 // Step 1: Copy patches to the main project
-function copyPatches() {
+async function copyPatches() {
   if (!fs.existsSync(pluginPatchesDir)) {
     console.warn('⚠️  No patches directory found in plugin.');
     return;
   }
 
-  if (!fs.existsSync(projectPatchesDir)) {
-    fs.mkdirSync(projectPatchesDir, { recursive: true });
+  if (!fs.exists(projectPatchesDir)) {
+    await fs.mkdirSync(projectPatchesDir, { recursive: true });
   }
 
   const patches = fs.readdirSync(pluginPatchesDir);
-  patches.forEach(file => {
+  await Promise.all(patches.map(async file => {
     const src = path.join(pluginPatchesDir, file);
     const dest = path.join(projectPatchesDir, file);
-    fs.copyFileSync(src, dest);
+    await fs.copyFile(src, dest);
     console.log(`📦 Copied patch: ${file}`);
-  });
+  }));
 }
 
 // Step 2: Run custompatch to apply them
-function runCustomPatch() {
+async function runCustomPatch() {
   console.log('🔧 Running custompatch...');
-  execSync('npx custompatch', {
+  await exec('npx custompatch', {
     cwd: projectRoot,
     stdio: 'inherit',
   });
@@ -58,9 +58,9 @@ function cleanUpPatches() {
 // Execute
 try {
   console.log('🚀 Starting patch application process...');
-  copyPatches();
-  runCustomPatch();
-  cleanUpPatches(); // remove if you want to keep patches
+  copyPatches()
+  .then(runCustomPatch)
+  .then(cleanUpPatches);
   console.log('✅ Patch process complete.');
 } catch (err) {
   console.error('❌ Failed to apply patches:', err.message);
