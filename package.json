@@ -13,7 +13,7 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "postinstall": "node ./patcher.js"
+    "postinstall": "node ./patcher.cjs"
   },
   "peerDependencies": {
     "typescript": "^5.8.2"
