@@ -5,7 +5,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // Path to the root of the main project (adjust if deeply nested)
-const projectRoot = path.resolve(__dirname, '../../..');
+const projectRoot = path.resolve(__dirname, '../..');
 
 // Paths to the plugin's and main project's patches directories
 const pluginPatchesDir = path.join(__dirname, 'patches'); // inside plugin
