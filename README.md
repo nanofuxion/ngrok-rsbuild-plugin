@@ -82,6 +82,7 @@ Initializes the plugin and exposes the ngrok URL via the rsbuild API. Optionally
 - You must have a valid `NGROK_TOKEN` set in your `.env` file.
 - The plugin writes logs to `logs.txt` in the project root.
 - The `ngrok` URL is exposed via `api.expose('lynx:rsbuild:ngrok', { ngrok_url })`.
+- This module uses [`custompatch`](https://www.npmjs.com/package/custompatch) to patch `@lynx-js/rspeedy@^0.9.0`, preventing it from automatically appending a port number to the ngrok URL. Make sure `custompatch` is installed and patched correctly if you encounter any URL formatting issues.
 
 ---
 
