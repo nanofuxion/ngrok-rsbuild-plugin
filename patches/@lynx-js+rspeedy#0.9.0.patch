@@ -1,0 +1,15 @@
+Index: /@lynx-js/rspeedy/dist/src_plugins_dev_plugin_ts.js
+===================================================================
+--- /@lynx-js/rspeedy/dist/src_plugins_dev_plugin_ts.js
++++ /@lynx-js/rspeedy/dist/src_plugins_dev_plugin_ts.js
+@@ -50,9 +50,9 @@
+                             if (server?.port !== void 0) {
+                                 const hasPortPlaceholder = assetPrefix.includes('<port>');
+                                 if (!hasPortPlaceholder) {
+                                     const assetPrefixURL = new URL(assetPrefix);
+-                                    if (assetPrefixURL.port !== String(server.port)) {
++                                    if (assetPrefixURL.port !== String(server.port) && !assetPrefixURL.host.includes("ngrok")) {
+                                         core_.logger.warn(`Setting different port values in ${picocolors_default().cyan('server.port')} and ${picocolors_default().cyan('dev.assetPrefix')}. Using server.port(${picocolors_default().cyan(server.port)}) to make HMR work.`);
+                                         assetPrefixURL.port = String(server.port);
+                                         assetPrefix = assetPrefixURL.toString();
+                                     }
