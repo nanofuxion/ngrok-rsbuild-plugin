@@ -25,7 +25,7 @@ This plugin creates an [ngrok](https://ngrok.com/) tunnel for your dev server, s
 ## Installation
 
 ```bash
-npm install ngrok @lynx-js/qrcode-rsbuild-plugin --save-dev
+npm install ngrok ngrok-rsbuild-plugin @lynx-js/qrcode-rsbuild-plugin --save-dev
 ```
 
 ---
