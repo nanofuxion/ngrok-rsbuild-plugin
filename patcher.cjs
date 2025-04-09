@@ -1,6 +1,7 @@
 // patcher.js
 
 const fs = require('fs/promises');
+const fsSync = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
 
@@ -13,16 +14,16 @@ const projectPatchesDir = path.join(projectRoot, 'patches');
 
 // Step 1: Copy patches to the main project
 async function copyPatches() {
-  if (!fs.existsSync(pluginPatchesDir)) {
+  if (!fsSync.existsSync(pluginPatchesDir)) {
     console.warn('⚠️  No patches directory found in plugin.');
     return;
   }
 
   if (!fs.exists(projectPatchesDir)) {
-    await fs.mkdirSync(projectPatchesDir, { recursive: true });
+    await fsSync.mkdirSync(projectPatchesDir, { recursive: true });
   }
 
-  const patches = fs.readdirSync(pluginPatchesDir);
+  const patches = fsSync.readdirSync(pluginPatchesDir);
   await Promise.all(patches.map(async file => {
     const src = path.join(pluginPatchesDir, file);
     const dest = path.join(projectPatchesDir, file);
@@ -42,16 +43,16 @@ async function runCustomPatch() {
 
 // Step 3: Clean up patches after applying (optional)
 function cleanUpPatches() {
-  const patches = fs.readdirSync(projectPatchesDir);
+  const patches = fsSync.readdirSync(projectPatchesDir);
   patches.forEach(file => {
     const filePath = path.join(projectPatchesDir, file);
-    fs.unlinkSync(filePath);
+    fsSync.unlinkSync(filePath);
     console.log(`🧹 Deleted patch: ${file}`);
   });
 
   // Optional: remove patches folder if empty
-  if (fs.readdirSync(projectPatchesDir).length === 0) {
-    fs.rmdirSync(projectPatchesDir);
+  if (fsSync.readdirSync(projectPatchesDir).length === 0) {
+    fsSync.rmdirSync(projectPatchesDir);
   }
 }
 
